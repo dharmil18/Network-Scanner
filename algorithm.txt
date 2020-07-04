@@ -1,0 +1,6 @@
+Algorithm for building a Network Scanner
+
+1. Create an ARP Request directed to broadcast MAC asking for IP Adresses.
+2. Send Packets and Receive response.
+3. Parse the response.
+4. Print the result.
