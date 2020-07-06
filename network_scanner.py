@@ -1,6 +1,19 @@
 import scapy.all as scapy
 import argparse
 
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--target', dest='target', help='Target IP Address/Adresses')
+    options = parser.parse_args()
+
+    #Check for errors i.e if the user does not specify the target IP Address
+    #Quit the program the argument is missing
+    #While quitting also display an error message
+    if not options.target:
+        #Handling the code if interface is not specified
+        parser.error("[-] Please specify an IP Address or Addresses, use --help for more info.")
+    return options
+
 def scan(ip):
     # scapy.arping(ip)
 
@@ -55,5 +68,6 @@ def display_result(result):
         print("{}\t{}".format(i["ip"], i["mac"]))
 
 
-scanned_output = scan("10.0.2.1/24")
+options = get_args()
+scanned_output = scan(options.target)
 display_result(scanned_output)
