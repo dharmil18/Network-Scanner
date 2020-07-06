@@ -1,4 +1,5 @@
 import scapy.all as scapy
+import argparse
 
 def scan(ip):
     # scapy.arping(ip)
@@ -34,10 +35,25 @@ def scan(ip):
     also important as it tells for how much time to wait for an response. Eg: timeout = 1 means wait for 1 sec for the response and
     if there is no response proceed with other IP addresses.
 
-    scapy.srp() returns the responses captured as a 
-    '''
-    answered, unanswered = scapy.srp(broadcast_ether_arp_req_frame, timeout = 1)
-    print(answered.summary())
-    print(unanswered.summary())
+    scapy.srp() returns the responses captured as two lists out of which the 1st list contains the answered responses from devices on the network and the 
+    2nd list contains the records of IP Addresses which did not respond.
 
-scan("10.0.2.0/24")
+    verbose = False means the srp method will not print any message of its own in the output
+    '''
+    answered_list = scapy.srp(broadcast_ether_arp_req_frame, timeout = 1, verbose = False)[0]
+    result = []
+    for i in range(0,len(answered_list)):
+        client_dict = {"ip" : answered_list[i][1].psrc, "mac" : answered_list[i][1].hwsrc}
+        result.append(client_dict)
+
+    return result
+
+
+def display_result(result):
+    print("-----------------------------------\nIP Address\tMAC Address\n-----------------------------------")
+    for i in result:
+        print("{}\t{}".format(i["ip"], i["mac"]))
+
+
+scanned_output = scan("10.0.2.1/24")
+display_result(scanned_output)
