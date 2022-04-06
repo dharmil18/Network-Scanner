@@ -1,5 +1,6 @@
 import scapy.all as scapy
 import argparse
+import socket
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -30,9 +31,9 @@ def scan(ip):
     return result
   
 def display_result(result):
-    print("-----------------------------------\nIP Address\tMAC Address\n-----------------------------------")
+    print("-----------------------------------\nIP Address\tMAC Address\tHostname\n-----------------------------------")
     for i in result:
-        print("{}\t{}".format(i["ip"], i["mac"]))
+        print("{}\t{}\t{}".format(i["ip"], i["mac"], socket.gethostbyaddr(i["ip"][0]))
   
 
 options = get_args()
